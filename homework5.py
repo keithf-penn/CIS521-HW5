@@ -127,7 +127,7 @@ class Sudoku(object):
         """
         protagonist = self.board[cell1]
         antagonist = self.board[cell2]
-        print(antagonist)
+        print(protagonist, antagonist)
         if len(antagonist) == 1:
             if antagonist not in protagonist:
                 return False
