@@ -125,6 +125,7 @@ class Sudoku(object):
         Retrieves the set from cell1, then if cell2 has a value,
         removes that value from the set of cell1.
         """
+        print(cell1, cell2)
         protagonist = self.board[cell1]
         antagonist = self.board[cell2]
         print(protagonist, antagonist)
