@@ -43,13 +43,10 @@ def sudoku_arcs():
                 verti_arc = (offset, col)
                 if square != horiz_arc:
                     if (square, horiz_arc) not in arcs:
-                        # print((square, horiz_arc))
                         arcs.append((square, horiz_arc))
                 if square != verti_arc:
                     if (square, verti_arc) not in arcs:
-                        # print((square, verti_arc))
                         arcs.append((square, verti_arc))
-    # print("LEN ARCS ",len(arcs))
     # Items in same box
     # e.g. (0,0), (0,1), (0,2), (1,0), (1,1), (1,2), (2,0), (2,1), (2,2)
     boxes = []
@@ -67,9 +64,7 @@ def sudoku_arcs():
             offset2 += 3
         offset2 = 0
         offset1 += 3
-    
-    # print(len(boxes))
-    # print(boxes)
+
     offset1 = 0
     offset2 = 0
     for box in boxes:
@@ -88,13 +83,8 @@ def sudoku_arcs():
         if offset1 == 9:
             offset1 = 0
             offset2 += 3
-    
-    #arcs = set(arcs)
-    # print("LEN = ", len(arcs))
-    # Expected 1620 arcs
-    # 81 extra items
-    # print(arcs)
-    return tuple(arcs)
+            
+    return arcs
         
     
 def read_board(path):
@@ -109,7 +99,11 @@ def read_board(path):
     rows, cols = 9, 9
     for row in range(rows):
         for col in range(cols):
-            board[(row, col)] = lines[row][col]
+            value = lines[row][col]
+            if value == '*':
+                board[(row, col)] = set([1, 2, 3, 4, 5, 6, 7, 8, 9])
+            else:
+                board[(row, col)] = set([int(value)])
     return board
 
 class Sudoku(object):
@@ -121,18 +115,25 @@ class Sudoku(object):
         self.board = board
         self.rows = 9
         self.cols = 9
-        
-        pass
 
             
     def get_values(self, cell):
-        if self.board[cell] == '*':
-            return set([1, 2, 3, 4, 5, 6, 7, 8, 9])
-        else:
-            return set([self.board[cell]])
+            return self.board[cell]
 
     def remove_inconsistent_values(self, cell1, cell2):
-        pass
+        """
+        Retrieves the set from cell1, then if cell2 has a value,
+        removes that value from the set of cell1.
+        """
+        antagonist = self.board[cell2]
+        print(antagonist)
+        if len(antagonist) == 1:
+            self.board[cell1].remove(antagonist.pop())
+            return True
+        return False
+            
+        
+        
 
     def infer_ac3(self):
         pass
@@ -160,17 +161,26 @@ feedback_question_3 = """
 f
 """
 
-# b = read_board(".\sudoku\medium1.txt")
-# print(b)
-# x = Sudoku(b)
-# print(x.get_values((0, 0)))
-# print(x.get_values((0, 1)))
+b = read_board(".\sudoku\medium1.txt")
+print(b)
+x = Sudoku(b)
+print(x.get_values((0, 0)))
+print(x.get_values((0, 1)))
 # print(sudoku_cells())
 # print(sudoku_arcs())
-# print(((0, 0), (0, 8)) in sudoku_arcs())
-# print(((0, 0), (8, 0)) in sudoku_arcs())
-# print(((0, 8), (0, 0)) in sudoku_arcs())
-# print(((0, 0), (2, 1)) in sudoku_arcs())
-# print(((2, 2), (0, 0)) in sudoku_arcs())
-# print(((2, 3), (0, 0)) in sudoku_arcs())
+print(((0, 0), (0, 8)) in sudoku_arcs())
+print(((0, 0), (8, 0)) in sudoku_arcs())
+print(((0, 8), (0, 0)) in sudoku_arcs())
+print(((0, 0), (2, 1)) in sudoku_arcs())
+print(((2, 2), (0, 0)) in sudoku_arcs())
+print(((2, 3), (0, 0)) in sudoku_arcs())
+
+sudoku = Sudoku(read_board("sudoku/easy.txt"))
+print(sudoku.get_values((0, 3)))
+
+for col in [0, 1, 4]:
+    removed = sudoku.remove_inconsistent_values((0, 3), (0, col))
+    print(removed, sudoku.get_values((0, 3)))
+
+
 
