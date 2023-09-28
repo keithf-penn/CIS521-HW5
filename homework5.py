@@ -129,9 +129,11 @@ class Sudoku(object):
         antagonist = self.board[cell2]
         print(protagonist, antagonist)
         if len(antagonist) == 1:
-            if antagonist not in protagonist:
+            ant_value = antagonist.pop()
+            if ant_value not in protagonist:
+                antagonist.add(ant_value)
                 return False
-            protagonist.remove(antagonist.pop())
+            protagonist.remove(ant_value)
             return True
         return False
             
