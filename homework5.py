@@ -2,7 +2,7 @@
 # CIS 521: Homework 5
 ############################################################
 
-student_name = "Type your full name here."
+student_name = "Keith Fuchs"
 
 ############################################################
 # Imports
@@ -21,12 +21,66 @@ import math
 ############################################################
 
 def sudoku_cells():
-    obj = Sudoku()
-    pass
+    cells = []
+    rows = 9
+    cols = 9
+    for row in range(rows):
+        for col in range(cols):
+            cells.append((row, col))
+    return cells
 
 def sudoku_arcs():
-    pass
+    # Provides a tuple of pairs of tuples.
+    # The pairs are in same arc.
+    arcs = []
+    # Items in same row
+    # Items in same column
+    for row in range(9):
+        for col in range(9):
+            for offset in range(9):
+                square = (row, col)
+                horiz_arc = (row, offset)
+                verti_arc = (offset, col)
+                if (square, horiz_arc) not in arcs:
+                    arcs.append((square, horiz_arc))
+                if (square, verti_arc) not in arcs:
+                    arcs.append((square, verti_arc))
+        
+    # Items in same box
+    # e.g. (0,0), (0,1), (0,2), (1,0), (1,1), (1,2), (2,0), (2,1), (2,2)
+    boxes = []
+    box = []
+    offset1 = 0
+    offset2 = 0
+    while offset1 < 9:
+        while offset2 < 9:
+            box = []
+            for row in range(3):
+                for col in range(3):
+                    square = (row + offset1, col + offset2)
+                    box.append(square)
+            boxes.append(box)
+            offset2 += 3
+        offset2 = 0
+        offset1 += 3
+    
+    offset1 = 0
+    offset2 = 0
+    for box in boxes:
+        for row in range(0 + offset2, 3 + offset2):
+            for col in range(0 + offset1, 3 + offset1):
+                square = (row, col)
+                for item in box:
+                    arcs.append((item, square))
+                    arcs.append((square, item))
+        offset1 += 3
+        if offset1 == 9:
+            offset1 = 0
+            offset2 += 3
 
+    return tuple(arcs)
+        
+    
 def read_board(path):
     board = dict()
     line = True
@@ -94,8 +148,17 @@ Your response may span multiple lines.
 Do not include these instructions in your response.
 """
 
-b = read_board(".\sudoku\medium1.txt")
-print(b)
-x = Sudoku(b)
-print(x.get_values((0, 0)))
-print(x.get_values((0, 1)))
+# b = read_board(".\sudoku\medium1.txt")
+# print(b)
+# x = Sudoku(b)
+# print(x.get_values((0, 0)))
+# print(x.get_values((0, 1)))
+# print(sudoku_cells())
+# print(sudoku_arcs())
+# print(((0, 0), (0, 8)) in sudoku_arcs())
+# print(((0, 0), (8, 0)) in sudoku_arcs())
+# print(((0, 8), (0, 0)) in sudoku_arcs())
+# print(((0, 0), (2, 1)) in sudoku_arcs())
+# print(((2, 2), (0, 0)) in sudoku_arcs())
+# print(((2, 3), (0, 0)) in sudoku_arcs())
+
