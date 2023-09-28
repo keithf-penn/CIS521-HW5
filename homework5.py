@@ -41,11 +41,15 @@ def sudoku_arcs():
                 square = (row, col)
                 horiz_arc = (row, offset)
                 verti_arc = (offset, col)
-                if (square, horiz_arc) not in arcs:
-                    arcs.append((square, horiz_arc))
-                if (square, verti_arc) not in arcs:
-                    arcs.append((square, verti_arc))
-        
+                if square != horiz_arc:
+                    if (square, horiz_arc) not in arcs:
+                        # print((square, horiz_arc))
+                        arcs.append((square, horiz_arc))
+                if square != verti_arc:
+                    if (square, verti_arc) not in arcs:
+                        # print((square, verti_arc))
+                        arcs.append((square, verti_arc))
+    # print("LEN ARCS ",len(arcs))
     # Items in same box
     # e.g. (0,0), (0,1), (0,2), (1,0), (1,1), (1,2), (2,0), (2,1), (2,2)
     boxes = []
@@ -64,6 +68,8 @@ def sudoku_arcs():
         offset2 = 0
         offset1 += 3
     
+    # print(len(boxes))
+    # print(boxes)
     offset1 = 0
     offset2 = 0
     for box in boxes:
@@ -71,13 +77,23 @@ def sudoku_arcs():
             for col in range(0 + offset1, 3 + offset1):
                 square = (row, col)
                 for item in box:
-                    arcs.append((item, square))
-                    arcs.append((square, item))
+                    if item != square:
+                        a1 = (item, square)
+                        if a1 not in arcs:
+                            arcs.append(a1)
+                        a2 = (square, item)
+                        if a2 not in arcs:
+                            arcs.append(a2)                        
         offset1 += 3
         if offset1 == 9:
             offset1 = 0
             offset2 += 3
-
+    
+    #arcs = set(arcs)
+    # print("LEN = ", len(arcs))
+    # Expected 1620 arcs
+    # 81 extra items
+    # print(arcs)
     return tuple(arcs)
         
     
@@ -134,18 +150,14 @@ class Sudoku(object):
 ############################################################
 
 # Just an approximation is fine.
-feedback_question_1 = 0
+feedback_question_1 = 20
 
 feedback_question_2 = """
-Type your response here.
-Your response may span multiple lines.
-Do not include these instructions in your response.
+f
 """
 
 feedback_question_3 = """
-Type your response here.
-Your response may span multiple lines.
-Do not include these instructions in your response.
+f
 """
 
 # b = read_board(".\sudoku\medium1.txt")
