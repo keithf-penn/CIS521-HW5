@@ -161,26 +161,26 @@ feedback_question_3 = """
 f
 """
 
-b = read_board(".\sudoku\medium1.txt")
-print(b)
-x = Sudoku(b)
-print(x.get_values((0, 0)))
-print(x.get_values((0, 1)))
-# print(sudoku_cells())
-# print(sudoku_arcs())
-print(((0, 0), (0, 8)) in sudoku_arcs())
-print(((0, 0), (8, 0)) in sudoku_arcs())
-print(((0, 8), (0, 0)) in sudoku_arcs())
-print(((0, 0), (2, 1)) in sudoku_arcs())
-print(((2, 2), (0, 0)) in sudoku_arcs())
-print(((2, 3), (0, 0)) in sudoku_arcs())
+# b = read_board(".\sudoku\medium1.txt")
+# print(b)
+# x = Sudoku(b)
+# print(x.get_values((0, 0)))
+# print(x.get_values((0, 1)))
+# # print(sudoku_cells())
+# # print(sudoku_arcs())
+# print(((0, 0), (0, 8)) in sudoku_arcs())
+# print(((0, 0), (8, 0)) in sudoku_arcs())
+# print(((0, 8), (0, 0)) in sudoku_arcs())
+# print(((0, 0), (2, 1)) in sudoku_arcs())
+# print(((2, 2), (0, 0)) in sudoku_arcs())
+# print(((2, 3), (0, 0)) in sudoku_arcs())
 
-sudoku = Sudoku(read_board("sudoku/easy.txt"))
-print(sudoku.get_values((0, 3)))
+# sudoku = Sudoku(read_board("sudoku/easy.txt"))
+# print(sudoku.get_values((0, 3)))
 
-for col in [0, 1, 4]:
-    removed = sudoku.remove_inconsistent_values((0, 3), (0, col))
-    print(removed, sudoku.get_values((0, 3)))
+# for col in [0, 1, 4]:
+#     removed = sudoku.remove_inconsistent_values((0, 3), (0, col))
+#     print(removed, sudoku.get_values((0, 3)))
 
 
 
