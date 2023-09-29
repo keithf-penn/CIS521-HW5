@@ -1,9 +1,6 @@
 from queue import Queue
 from queue import PriorityQueue
-import copy
-import itertools
-import random
-import math
+from copy import deepcopy
 
 ############################################################
 # CIS 521: Homework 5
@@ -123,6 +120,57 @@ class Sudoku(object):
         self.board = board
         self.rows = 9
         self.cols = 9
+    
+    def check_valid(self):
+        try:
+            row_valid = self.check_row()
+            col_valid = self.check_col()
+            box_valid = self.check_box()
+            if row_valid == False or col_valid == False or box_valid == False:
+                return False
+            else:
+                return True
+        except:
+            return False
+
+
+    def check_row(self):
+        row_valid = True
+        for i in range(9):
+            current_row = self.puzzle[i]
+            if set(current_row) != set(range(1,10)):
+                row_valid = False
+                break
+        return row_valid
+
+    def check_col(self):
+        col_valid = True
+        for i in range(9):
+            current_col = []
+            for j in range(9):
+                current_col.append(self.puzzle[j][i])
+            if set(current_col) != set(range(1,10)):
+                col_valid = False
+                break
+        return col_valid
+
+    def check_box(self):
+        box_valid = True
+        for i in range(3):
+            start_row = i*3
+            for j in range(3):
+                start_col = j*3
+                current_box = []
+                for ii in range(3):
+                    for jj in range(3):
+                        current_box.append(self.puzzle[start_row + ii][start_col+jj])
+                if set(current_box) != set(range(1,10)):
+                    box_valid = False
+                    break
+            if box_valid == False:
+                break
+        return box_valid
+
 
     def get_values(self, cell):
         return self.board[cell]
@@ -222,10 +270,24 @@ class Sudoku(object):
                         continue
 
 
-
     def infer_with_guessing(self):
-        pass
-    
+        print("calling guessing...")
+        self.infer_improved()
+        if self.check_valid():
+            print(self.board)
+            return
+        else:
+            print("trying to guess...")
+            for cell in self.CELLS:
+                for val in self.board[cell]:
+                    new = Sudoku(deepcopy(self.board))
+                    new.board[cell] = {val}
+                    new.infer_with_guessing()
+        
+
+
+
+
 
 
 ############################################################
@@ -244,15 +306,16 @@ f
 """
 
 
-# s = Sudoku(read_board("sudoku/easy.txt"))
-# s.infer_ac3()
-# print(s.board)
+s = Sudoku(read_board("sudoku/easy.txt"))
+s.infer_ac3()
+print(s.board)
+print(s.check_valid())
 #
 #
-# b = read_board(".\sudoku\medium1.txt")
-# x = Sudoku(b)
-# y = x.infer_improved()
-# print(x.board)
+b = read_board(".\sudoku\medium1.txt")
+x = Sudoku(b)
+y = x.infer_improved()
+print(x.check_valid())
 # print(x.get_neighbors((3,5)))
 # print(x.get_values((0, 0)))
 # print(x.get_values((0, 1)))
@@ -272,5 +335,6 @@ f
 #     removed = sudoku.remove_inconsistent_values((0, 3), (0, col))
 #     print(removed, sudoku.get_values((0, 3)))
 
-
-
+# b = read_board(".\sudoku\hard1.txt")
+# x = Sudoku(b)
+# print(x.infer_with_guessing())
